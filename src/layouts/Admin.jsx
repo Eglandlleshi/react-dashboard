@@ -41,38 +41,23 @@ class Admin extends Component {
       fixedClasses: "dropdown show-dropdown open"
     };
   }
+  
   handleNotificationClick = position => {
-    var color = Math.floor(Math.random() * 4 + 1);
-    var level;
-    switch (color) {
-      case 1:
-        level = "success";
-        break;
-      case 2:
-        level = "warning";
-        break;
-      case 3:
-        level = "error";
-        break;
-      case 4:
-        level = "info";
-        break;
-      default:
-        break;
-    }
     this.state._notificationSystem.addNotification({
       title: <span data-notify="icon" className="pe-7s-gift" />,
       message: (
         <div>
           Welcome to <b>Light Bootstrap Dashboard</b> - a beautiful freebie for
-          every web developer.
+          every web .
         </div>
       ),
-      level: level,
+      /* notification levels "success" "warning"; "error"; info"; */
+      level: "success",
       position: position,
       autoDismiss: 15
     });
   };
+  
   getRoutes = routes => {
     return routes.map((prop, key) => {
       if (prop.layout === "/admin") {
