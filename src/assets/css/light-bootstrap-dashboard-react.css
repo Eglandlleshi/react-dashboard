@@ -110,6 +110,9 @@ h1 .subtitle {
 .text-primary, .text-primary:hover {
   color: #1D62F0 !important; }
 
+  .text-yellow, .text-yeallow:hover {
+    color: yellow !important; }
+
 .text-info, .text-info:hover {
   color: #1DC7EA !important; }
 

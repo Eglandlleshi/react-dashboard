@@ -26,159 +26,146 @@ import {
 } from "react-bootstrap";
 
 import { Card } from "components/Card/Card.jsx";
-import { FormInputs } from "components/FormInputs/FormInputs.jsx";
-import { UserCard } from "components/UserCard/UserCard.jsx";
-import Button from "components/CustomButton/CustomButton.jsx";
+import axios from 'axios'
+
+
+import {
+  ageLegendPie,
+  genderLegendPie,
+  emotionLegendPie,
+  beardLegendPie
+} from "variables/Variables.jsx";
+
+import ChartistGraph from "react-chartist";
 
 import avatar from "assets/img/faces/face-3.jpg";
 
+import '../assets/css/colors.css'
+
 class UserProfile extends Component {
+
+  state = {
+    ageDataPie : {
+      labels: ["10%", "10%","10%","10%","10%","10%","10%","10%"],
+      series: [10,10,10,20,20,10,10,10]
+    },
+    genderDataPie : {
+      labels: ["60%", "40%"],
+      series: [66.3,33.3]
+    },
+    emotionDataPie : {
+      labels: ["10%", "10%","10%","20%","20%","20%","10%"],
+      series: [10,10,10,20,20,20,10]
+    },
+    beardDataPie : {
+      labels: ["70%", "30%"],
+      series: [70,30]
+    }
+  }
+
+  createLegend(json){
+    var legend = [];
+    for (var i = 0; i < json["names"].length; i++) {
+    var type = "badge badge--"+json["types"][i]+" badge--small"
+    legend.push(<span class={type}>{json["names"][i]}</span>);
+      legend.push(" ");
+    }
+    return legend;
+  }
+
+  testAPI() {
+    axios.get('http://192.168.0.41:8080/getGender')
+      .then(response =>{
+        console.log(response.data[0].Male.nrOfMales)
+      })
+    }
+
+  componentDidMount(){
+   this.testAPI()
+  }
+
   render() {
     return (
       <div className="content">
         <Grid fluid>
           <Row>
-            <Col md={8}>
+          <Col md={6}>
               <Card
-                title="Edit Profile"
+                statsIcon="fa fa-refresh"
+                title="Gender Statistics"
+                category="Last Campaign Performance"
+                stats="Updated now"
                 content={
-                  <form>
-                    <FormInputs
-                      ncols={["col-md-5", "col-md-3", "col-md-4"]}
-                      properties={[
-                        {
-                          label: "Company (disabled)",
-                          type: "text",
-                          bsClass: "form-control",
-                          placeholder: "Company",
-                          defaultValue: "Creative Code Inc.",
-                          disabled: true
-                        },
-                        {
-                          label: "Username",
-                          type: "text",
-                          bsClass: "form-control",
-                          placeholder: "Username",
-                          defaultValue: "michael23"
-                        },
-                        {
-                          label: "Email address",
-                          type: "email",
-                          bsClass: "form-control",
-                          placeholder: "Email"
-                        }
-                      ]}
-                    />
-                    <FormInputs
-                      ncols={["col-md-6", "col-md-6"]}
-                      properties={[
-                        {
-                          label: "First name",
-                          type: "text",
-                          bsClass: "form-control",
-                          placeholder: "First name",
-                          defaultValue: "Mike"
-                        },
-                        {
-                          label: "Last name",
-                          type: "text",
-                          bsClass: "form-control",
-                          placeholder: "Last name",
-                          defaultValue: "Andrew"
-                        }
-                      ]}
-                    />
-                    <FormInputs
-                      ncols={["col-md-12"]}
-                      properties={[
-                        {
-                          label: "Adress",
-                          type: "text",
-                          bsClass: "form-control",
-                          placeholder: "Home Adress",
-                          defaultValue:
-                            "Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09"
-                        }
-                      ]}
-                    />
-                    <FormInputs
-                      ncols={["col-md-4", "col-md-4", "col-md-4"]}
-                      properties={[
-                        {
-                          label: "City",
-                          type: "text",
-                          bsClass: "form-control",
-                          placeholder: "City",
-                          defaultValue: "Mike"
-                        },
-                        {
-                          label: "Country",
-                          type: "text",
-                          bsClass: "form-control",
-                          placeholder: "Country",
-                          defaultValue: "Andrew"
-                        },
-                        {
-                          label: "Postal Code",
-                          type: "number",
-                          bsClass: "form-control",
-                          placeholder: "ZIP Code"
-                        }
-                      ]}
-                    />
-
-                    <Row>
-                      <Col md={12}>
-                        <FormGroup controlId="formControlsTextarea">
-                          <ControlLabel>About Me</ControlLabel>
-                          <FormControl
-                            rows="5"
-                            componentClass="textarea"
-                            bsClass="form-control"
-                            placeholder="Here can be your description"
-                            defaultValue="Lamborghini Mercy, Your chick she so thirsty, I'm in that two seat Lambo."
-                          />
-                        </FormGroup>
-                      </Col>
-                    </Row>
-                    <Button bsStyle="info" pullRight fill type="submit">
-                      Update Profile
-                    </Button>
-                    <div className="clearfix" />
-                  </form>
-                }
-              />
-            </Col>
-            <Col md={4}>
-              <UserCard
-                bgImage="https://ununsplash.imgix.net/photo-1431578500526-4d9613015464?fit=crop&fm=jpg&h=300&q=75&w=400"
-                avatar={avatar}
-                name="Mike Andrew"
-                userName="michael24"
-                description={
-                  <span>
-                    "Lamborghini Mercy
-                    <br />
-                    Your chick she so thirsty
-                    <br />
-                    I'm in that two seat Lambo"
-                  </span>
-                }
-                socials={
-                  <div>
-                    <Button simple>
-                      <i className="fa fa-facebook-square" />
-                    </Button>
-                    <Button simple>
-                      <i className="fa fa-twitter" />
-                    </Button>
-                    <Button simple>
-                      <i className="fa fa-google-plus-square" />
-                    </Button>
+                  <div
+                    id="chartPreferences"
+                    className="ct-chart ct-perfect-fourth"
+                  >
+                    <ChartistGraph data={this.state.genderDataPie}  type="Pie" />
                   </div>
                 }
+                legend={
+                  <div className="legend">{this.createLegend(genderLegendPie)}</div>
+                }
               />
             </Col>
+            <Col md={6}>
+              <Card
+                statsIcon="fa fa-refresh"
+                title="Age Statistics"
+                category="Last Campaign Performance"
+                stats="Updated now"
+                content={
+                  <div
+                    id="chartPreferences"
+                    className="ct-chart ct-perfect-fourth"
+                  >
+                    <ChartistGraph data={this.state.ageDataPie} type="Pie" />
+                  </div>
+                }
+                legend={
+                  <div className="legend">{this.createLegend(ageLegendPie)}</div>
+                }
+              />
+            </Col>
+            <Col md={6}>
+              <Card
+                statsIcon="fa fa-refresh"
+                title="Emotions Statistics"
+                category="Last Campaign Performance"
+                stats="Updated now"
+                content={
+                  <div
+                    id="chartPreferences"
+                    className="ct-chart ct-perfect-fourth"
+                  >
+                    <ChartistGraph data={this.state.emotionDataPie} type="Pie" />
+                  </div>
+                }
+                legend={
+                  <div className="legend">{this.createLegend(emotionLegendPie)}</div>
+                }
+              />
+            </Col>
+            <Col md={6}>
+              <Card
+                statsIcon="fa fa-refresh"
+                title="Beard Statistics"
+                category="Last Campaign Performance"
+                stats="Updated now"
+                content={
+                  <div
+                    id="chartPreferences"
+                    className="ct-chart ct-perfect-fourth"
+                  >
+                    <ChartistGraph data={this.state.beardDataPie} type="Pie" />
+                  </div>
+                }
+                legend={
+                  <div className="legend">{this.createLegend(beardLegendPie)}</div>
+                }
+              />
+            </Col>
+
           </Row>
         </Grid>
       </div>

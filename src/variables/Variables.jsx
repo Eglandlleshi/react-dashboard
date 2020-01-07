@@ -492,6 +492,23 @@ const iconsArray = [
 // //
 //
 // Data for Pie Chart
+var genderLegendPie = {
+  names: ["Male", "Female"],
+  types: ["bojqell", "roze"]
+};
+var ageLegendPie = {
+  names: ["0-2", "4-6", "8-12","15-20", "25-32", "38-43", "48-53", "60-100"],
+  types: ["bojqell", "roze", "kafe","lejla","jeshile","blu","gri","kuqe"]
+};
+var emotionLegendPie = {
+  names: ["Angry", "Disgust", "Scared","Happy","Sad","Surprised","Neutral"],
+  types: ["bojqell", "roze", "kafe","lejla","jeshile","blu","gri"]
+};
+var beardLegendPie = {
+  names: ["Detected", "Not Detected"],
+  types: ["bojqell", "roze"]
+};
+
 var dataPie = {
   labels: ["40%", "20%", "40%"],
   series: [40, 20, 40]
@@ -604,6 +621,10 @@ module.exports = {
   tdArray, // For tables (TableList view)
   iconsArray, // For icons (Icons view)
   dataPie,
+  ageLegendPie,
+  genderLegendPie,
+  emotionLegendPie,
+  beardLegendPie,
   legendPie,
   dataSales,
   optionsSales,

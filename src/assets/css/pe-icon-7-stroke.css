@@ -41,6 +41,18 @@
 	-moz-osx-font-smoothing: grayscale;
 }
 
+.beard-icon:before{
+	content: url("beard-icon.png");
+}
+.age-icon:before{
+	content: url("age-icon.png");
+}
+.emotion-icon:before{
+	content: url("emotion-icon.png");
+}
+.gender-icon:before{
+	content: url("gender-icon.png");
+}
 .pe-7s-album:before {
 	content: "\e6aa";
 }

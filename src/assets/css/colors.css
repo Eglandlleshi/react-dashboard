@@ -1,0 +1,74 @@
+
+ span.bold-red {
+    color: rgb(218, 36, 36);
+    font-weight: bold;
+}
+
+
+.badge {
+    box-sizing: border-box;
+    display: inline-block;
+    background-color: #2c3e50;
+    color: #ffffff;
+    
+    border-radius: 3rem; 
+    text-align: center;
+
+    font-size: 1.6rem;
+    font-weight: 400;
+    padding: .05rem .8rem .1rem;
+    line-height: inherit;
+}
+
+.badge--line {
+    background-color: transparent;
+    color: #95a5a6;
+    box-shadow: 0 0 0 1px #95a5a6;
+}
+
+.badge--bojqell {
+    background-color: rgb(29, 199, 234);
+}
+
+.badge--roze {
+    background-color:  rgb(250, 64, 75);
+}
+
+.badge--kafe {
+    background-color:  rgb(255, 162, 63);
+}
+
+.badge--lejla {
+    background-color: rgb(147, 105, 233);
+}
+
+.badge--jeshile {
+  background-color: rgb(135, 203, 22);
+}
+
+.badge--blu {
+  background-color:  rgb(27, 141, 254);
+}
+
+.badge--gri {
+  background-color:  rgb(94, 94, 94);
+}
+
+.badge--kuqe {
+  background-color: rgb(221, 76, 57);
+}
+
+.badge--small {
+    font-size: 1.2rem;
+    padding: .1rem .65rem .2rem;
+}
+
+.badge--smaller {
+    font-size: .7rem;
+    padding: .05rem .4rem .15rem;
+}
+
+
+
+
+

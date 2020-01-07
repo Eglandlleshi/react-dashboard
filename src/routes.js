@@ -22,19 +22,18 @@ import Typography from "views/Typography.jsx";
 import Icons from "views/Icons.jsx";
 import Maps from "views/Maps.jsx";
 import Notifications from "views/Notifications.jsx";
-import Upgrade from "views/Upgrade.jsx";
 
 const dashboardRoutes = [
   {
-    path: "/dashboard",
-    name: "Dashboard",
+    path: "/realtimescan",
+    name: "Real Time Scan",
     icon: "pe-7s-graph",
     component: Dashboard,
     layout: "/admin"
   },
   {
-    path: "/user",
-    name: "User Profile",
+    path: "/statistic",
+    name: "Statistic",
     icon: "pe-7s-user",
     component: UserProfile,
     layout: "/admin"
@@ -72,14 +71,6 @@ const dashboardRoutes = [
     name: "Notifications",
     icon: "pe-7s-bell",
     component: Notifications,
-    layout: "/admin"
-  },
-  {
-    upgrade: true,
-    path: "/upgrade",
-    name: "Upgrade to PRO",
-    icon: "pe-7s-rocket",
-    component: Upgrade,
     layout: "/admin"
   }
 ];
