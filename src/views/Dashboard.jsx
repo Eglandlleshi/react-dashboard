@@ -45,7 +45,7 @@ class Dashboard extends Component {
     super(props);
     this.state = {
       _notificationSystem: null,
-      serverStatus: null,
+      serverStatus: "OFF",
       genderStr: null,
       ageStr: null,
       emotionStr: null,
@@ -68,10 +68,15 @@ class Dashboard extends Component {
 
 
   componentDidMount(){
-    this.testAPI()
+    
+    this.intervalAPI = setInterval(()=>this.intervalTestAPI(),2000)
   }
 
-  
+  componentWillUnmount(){
+    clearInterval(this.intervalAPI)
+    clearInterval(this.intervalScan)
+  }
+
   showNotification(text,color){
     let icon
     if(color==="info")
@@ -93,72 +98,138 @@ class Dashboard extends Component {
       autoDismiss: 2
      })
   }
+
+  errorActions(){
+    this.showNotification("Server OFF","error")
+    this.updateButtonState("OFF",null,"Scanning not available",true)
+    clearInterval(this.intervalScan)
+  }
+  succesActions(){
+    this.showNotification("Server ON","info")
+    this.updateButtonState("ON","info","Scan",false)
+  }
 /*http://23.96.37.119:8080/getAllPersons */
-  testAPI() {
-    axios.get('http://localhost:4000/test')
+  intervalTestAPI() {
+    axios.get('http://20.40.147.52:3000/test')
       .then(response =>{
-        console.log(response)
-        this.showNotification("Server ON","info")
-        this.setState({
-          serverStatus: "ON",
-          genderStr: null,
-          ageStr: null,
-          emotionStr: null,
-          beardStr: null,
-          buttonColor : "info",
-          buttonText : "Scan",
-          buttonState : false
-        })
+        if(this.state.serverStatus==="OFF"){
+          this.succesActions()
+        }
       })
       .catch(error=>{
         if (error.response) {
-          this.showNotification("Server OFF","error")
-          this.setState({
-            serverStatus: "OFF",
-            genderStr: null,
-            ageStr: null,
-            emotionStr: null,
-            beardStr: null,
-            buttonColor : null,
-            buttonText : "Scanning not available",
-            buttonState : true
-          })
+          if(this.state.serverStatus==="ON"){
+            this.errorActions()
+          }
       } else if (error.request) {
-        this.showNotification("Server OFF","error")
-        this.setState({
-          serverStatus: "OFF",
-          genderStr: null,
-          ageStr: null,
-          emotionStr: null,
-          beardStr: null,
-          buttonColor : null,
-          buttonText : "Scanning not available",
-          buttonState : true
-        })
+        if(this.state.serverStatus==="ON"){
+          this.errorActions()
+        }    
       } else {
-        this.showNotification("Server OFF","error")
-        this.setState({
-          serverStatus: "OFF",
-          genderStr: null,
-          ageStr: null,
-          emotionStr: null,
-          beardStr: null,
-          buttonColor : null,
-          buttonText : "Scanning not available",
-          buttonState : true
-        })
+        if(this.state.serverStatus==="ON"){
+          this.errorActions()
+        }
       }
       })
   }
-
-  update(){
-    console.log("2311321321311")
+  
+  
+  updateButtonState(serverStatus,buttonColor,buttonText,buttonState){
+    this.setState({
+      serverStatus: serverStatus,
+      buttonColor : buttonColor,
+      buttonText : buttonText,
+      buttonState : buttonState
+    })
   }
  
-  screenshot() {
+  getscreenshot() {
     // access the webcam trough this.refs
-    var screenshot = this.refs.webcam.getScreenshot()
+    let screenshot = this.refs.webcam.getScreenshot()
     console.log(screenshot)
+    return screenshot;
+  }
+
+  updateGenderAge(base64string){
+    axios.post('http://20.40.147.52:3000/agegender',{base64string})
+      .then(response =>{
+        if(response.data==="Face Not Detected"){
+          this.setState({
+            genderStr: "-",
+            ageStr: "-"
+          })
+        }
+        else{
+          this.setState({
+            genderStr: response.data.gender,
+            ageStr: response.data.age
+          })
+        }
+        
+        console.log(response)
+      })
+  }
+
+
+  updateEmotion(base64string){
+    axios.post('http://20.40.147.52:3000/emotions',{base64string})
+      .then(response =>{
+        if(response.data==="Face Not Detected"){
+          this.setState({
+            emotionStr: "-"
+          })
+        }
+        else{
+          this.setState({
+            emotionStr: response.data.emotion
+          })
+        }
+        console.log(response)
+      })
+  }
+
+  updateBeard(base64string){
+    axios.post('http://20.40.147.52:3000/beard',{base64string})
+      .then(response =>{
+        if(response.data==="Face Not Detected" || response.data.beard==="Not Detected"){
+          this.setState({
+            beardStr: "-"
+          })
+        }
+        else{
+          this.setState({
+            beardStr: response.data.beard
+          })
+        }
+        console.log(response)
+      })
+  }
+
+  scan(){
+   let base64string = this.getscreenshot()
+   this.updateGenderAge(base64string)
+   this.updateEmotion(base64string)
+   this.updateBeard(base64string)
+  }
+
+  start_stopScan(){
+    if(this.state.buttonText==="Scan"){
+    this.scan()
+    this.intervalScan = setInterval(()=>this.scan(),1500)
+    this.setState({
+      buttonColor: "danger",
+      buttonText:"Stop"
+    })
+    }
+
+    if(this.state.buttonText==="Stop"){
+      clearInterval(this.intervalScan)
+      this.setState({
+        buttonColor: "info",
+        buttonText:"Scan"
+      })
+      }
+
   }
 
   render() {
@@ -168,14 +239,14 @@ class Dashboard extends Component {
         <Grid fluid>
           <Row>
             <Col md={6}>
-            <Webcam width="500" audio ={false} ref='webcam'/>
+            <Webcam width="100%" audio ={false} ref='webcam'/>
             </Col>
             <Col lg={3} sm={6}>
               <StatsCard
                 id="a"
                 bigIcon= {<i className="gender-icon" />}
                 statsText={<p className="text-primary">Gender</p>}
-                statsValue={this.state.name}
+                statsValue={this.state.genderStr}
                 statsIcon={<i className="fa fa-refresh" />}
                 statsIconText="Updated now"
               />
@@ -184,7 +255,7 @@ class Dashboard extends Component {
               <StatsCard
                 bigIcon={<i className="age-icon" />}
                 statsText={<p className="text-success">Age</p>}
-                statsValue={this.state.name}
+                statsValue={this.state.ageStr}
                 statsIcon={<i className="fa fa-refresh" />}
                 statsIconText="Updated now"
               />
@@ -193,7 +264,7 @@ class Dashboard extends Component {
               <StatsCard
                 bigIcon={<i className="emotion-icon" />}
                 statsText={<p className="text-danger">Emotion</p>}
-                statsValue={this.state.name}
+                statsValue={this.state.emotionStr}
                 statsIcon={<i className="fa fa-refresh" />}
                 statsIconText="Updated now"
               />
@@ -202,13 +273,13 @@ class Dashboard extends Component {
               <StatsCard
                 bigIcon={<i className="beard-icon" />}
                 statsText={<p className="text-warning">Beard</p>}
-                statsValue={this.state.name}
+                statsValue={this.state.beardStr}
                 statsIcon={<i className="fa fa-refresh" />}
                 statsIconText="Updated now"
               />
             </Col>
-            <Col md={4} >
-            <Button disabled={this.state.buttonState} bsStyle={this.state.buttonColor} pullRight fill type="submit">{this.state.buttonText}</Button>
+            <Col md={3} >
+            <Button onClick={()=>this.start_stopScan()} disabled={this.state.buttonState} bsStyle={this.state.buttonColor} pullRight fill >{this.state.buttonText}</Button>
             </Col>
           </Row>
         </Grid>
