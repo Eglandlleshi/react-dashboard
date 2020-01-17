@@ -226,10 +226,17 @@ class Dashboard extends Component {
       clearInterval(this.intervalScan)
       this.setState({
         buttonColor: "info",
-        buttonText:"Scan"
+        buttonText:"Scan",
       })
+      setTimeout(()=>{
+        this.setState({
+          genderStr: null,
+          ageStr: null,
+          emotionStr: null,
+          beardStr: null,
+        })
+    }, 1500);
       }
-
   }
 
   render() {

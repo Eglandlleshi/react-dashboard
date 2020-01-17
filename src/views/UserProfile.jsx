@@ -19,15 +19,11 @@ import React, { Component } from "react";
 import {
   Grid,
   Row,
-  Col,
-  FormGroup,
-  ControlLabel,
-  FormControl
+  Col
 } from "react-bootstrap";
 
 import { Card } from "components/Card/Card.jsx";
 import axios from 'axios'
-
 
 import {
   ageLegendPie,
@@ -41,25 +37,42 @@ import ChartistGraph from "react-chartist";
 import avatar from "assets/img/faces/face-3.jpg";
 
 import '../assets/css/colors.css'
-
+/*
+ageDataPie : {
+  labels: ["10%", "10%","10%","10%","10%","10%","10%","10%"],
+  series: [10,10,10,20,20,10,10,10]
+},
+genderDataPie : {
+  labels: ["60%", "40%"],
+  series: [66.3,33.3]
+},
+emotionDataPie : {
+  labels: ["10%", "10%","10%","20%","20%","20%","10%"],
+  series: [10,10,10,20,20,20,10]
+},
+beardDataPie : {
+  labels: ["70%", "30%"],
+  series: [70,30]
+}
+*/
 class UserProfile extends Component {
 
   state = {
     ageDataPie : {
-      labels: ["10%", "10%","10%","10%","10%","10%","10%","10%"],
-      series: [10,10,10,20,20,10,10,10]
+      labels: [],
+      series: []
     },
     genderDataPie : {
-      labels: ["60%", "40%"],
-      series: [66.3,33.3]
+      labels: [],
+      series: []
     },
     emotionDataPie : {
-      labels: ["10%", "10%","10%","20%","20%","20%","10%"],
-      series: [10,10,10,20,20,20,10]
+      labels: [],
+      series: []
     },
     beardDataPie : {
-      labels: ["70%", "30%"],
-      series: [70,30]
+      labels: [],
+      series: []
     }
   }
 
@@ -77,12 +90,147 @@ class UserProfile extends Component {
     axios.get('http://192.168.0.41:8080/getGender')
       .then(response =>{
         console.log(response.data[0].Male.nrOfMales)
+       
       })
     }
 
   componentDidMount(){
-   this.testAPI()
+  //this.testAPI()
+  this.updateAge()
+  this.updateBeard()
+  this.updateEmotion()
+  this.updateGender()
   }
+
+
+ 
+  updateAge = ()=>{
+    axios.get('http://40.89.164.225:8080/getAge')
+    .then(response =>{
+      let data = {
+        labels: [],
+        series: []
+      }
+      if(response.data[0]['0-2']['%Of0-2']==0)
+        data.labels.push(null)
+      else
+        data.labels.push(response.data[0]['0-2']['%Of0-2'].toFixed(1)+"%")
+      data.series.push(response.data[0]['0-2']['%Of0-2'])
+
+
+      if(response.data[1]['4-6']['%Of4-6']==0)
+        data.labels.push("")
+      else
+        data.labels.push(response.data[1]['4-6']['%Of4-6'].toFixed(1)+"%")
+      data.series.push(response.data[1]['4-6']['%Of4-6'])
+
+      if(response.data[2]['8-12']['%Of0-2']==0)
+        data.labels.push("")
+      else
+        data.labels.push(response.data[2]['8-12']['%Of0-2'].toFixed(1)+"%")
+      data.series.push(response.data[2]['8-12']['%Of0-2'])
+
+      if(response.data[3]['15-20']['%Of15-20']==0)
+        data.labels.push("")
+      else
+        data.labels.push(response.data[3]['15-20']['%Of15-20'].toFixed(1)+"%")
+      data.series.push(response.data[3]['15-20']['%Of15-20'])
+      if(response.data[4]['25-32']['%Of25-32']==0){
+        data.labels.push("")
+      }
+      else{
+        data.labels.push(response.data[4]['25-32']['%Of25-32'].toFixed(1)+"%")
+      }
+      data.series.push(response.data[4]['25-32']['%Of25-32'])
+      if(response.data[5]['38-43']['%Of38-43']==0)
+        data.labels.push("")
+      else
+        data.labels.push(response.data[5]['38-43']['%Of38-43'].toFixed(1)+"%")
+      data.series.push(response.data[5]['38-43']['%Of38-43'])
+      if(response.data[6]['48-53']['%Of48-53']==0)
+        data.labels.push("")
+      else
+        data.labels.push(response.data[6]['48-53']['%Of48-53'].toFixed(1)+"%")
+      data.series.push(response.data[6]['48-53']['%Of48-53'])
+      if(response.data[7]['60-100']['%Of60-100']==0)
+        data.labels.push("")
+      else
+        data.labels.push(response.data[7]['60-100']['%Of60-100'].toFixed(1)+"%")
+      data.series.push(response.data[7]['60-100']['%Of60-100'])
+      console.log(data)
+      this.setState({
+        ageDataPie : data
+      })
+      console.log(response)
+    })
+  }
+
+  updateEmotion = ()=>{
+    axios.get('http://40.89.164.225:8080/getEmotion')
+    .then(response =>{
+      let data = {
+        labels: [],
+        series: []
+      }
+      data.labels.push(response.data[0].Angry['%OfAngry'].toFixed(1)+"%")
+      data.series.push(response.data[0].Angry['%OfAngry'])
+      data.labels.push(response.data[1].Disgust['%OfDisgust'].toFixed(1)+"%")
+      data.series.push(response.data[1].Disgust['%OfDisgust'])
+      data.labels.push(response.data[2].Scared['%OfScared'].toFixed(1)+"%")
+      data.series.push(response.data[2].Scared['%OfScared'])
+      data.labels.push(response.data[3].Happy['%OfHappy'].toFixed(1)+"%")
+      data.series.push(response.data[3].Happy['%OfHappy'])
+      data.labels.push(response.data[4].Sad['%OfSad'].toFixed(1)+"%")
+      data.series.push(response.data[4].Sad['%OfSad'])
+      data.labels.push(response.data[5].Surprised['%OfSurprised'].toFixed(1)+"%")
+      data.series.push(response.data[5].Surprised['%OfSurprised'])
+      data.labels.push(response.data[6].Neutral['%OfNeutral'].toFixed(1)+"%")
+      data.series.push(response.data[6].Neutral['%OfNeutral'])
+      this.setState({
+        emotionDataPie : data
+      })
+      console.log(response)
+    })
+  }
+
+  updateBeard = ()=>{
+    axios.get('http://40.89.164.225:8080/getBeard')
+    .then(response =>{
+      let data = {
+        labels: [],
+        series: []
+      }
+      data.labels.push(response.data[0]['Detected']['%OfDetected'].toFixed(1)+'%')
+      data.series.push(response.data[0]['Detected']['%OfDetected'])
+      data.labels.push(response.data[1]['Not Detected']['%OfNotDetected'].toFixed(1)+'%')
+      data.series.push(response.data[1]['Not Detected']['%OfNotDetected'])
+      this.setState({
+        beardDataPie : data
+      })
+      console.log(response)
+    })
+  }
+
+  updateGender = ()=>{
+    axios.get('http://40.89.164.225:8080/getGender')
+    .then(response =>{
+      let data = {
+        labels: [],
+        series: []
+      }
+      data.labels.push(response.data[0]['Male']['%OfMales'].toFixed(1)+'%')
+      data.series.push(response.data[0]['Male']['%OfMales'])
+      data.labels.push(response.data[1]['Female']['%OfMales'].toFixed(1)+'%')
+      data.series.push(response.data[1]['Female']['%OfMales'])
+      this.setState({
+        genderDataPie : data
+      })
+      console.log(response)
+    })
+  }
+
+  
+
 
   render() {
     return (
