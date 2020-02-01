@@ -29,7 +29,6 @@ class AdminNavbarLinks extends Component {
         <p className="hidden-lg hidden-md">Notification</p>
       </div>
     )
-    console.log(this.props.pathname)
     return (
       <div>
   

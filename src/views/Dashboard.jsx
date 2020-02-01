@@ -110,7 +110,7 @@ class Dashboard extends Component {
   }
 /*http://23.96.37.119:8080/getAllPersons */
   intervalTestAPI() {
-    axios.get('http://20.40.147.52:3000/test')
+    axios.get('http://52.237.9.215:8000/test')
       .then(response =>{
         if(this.state.serverStatus==="OFF"){
           this.succesActions()
@@ -146,12 +146,11 @@ class Dashboard extends Component {
   getscreenshot() {
     // access the webcam trough this.refs
     let screenshot = this.refs.webcam.getScreenshot()
-    console.log(screenshot)
     return screenshot;
   }
 
   updateGenderAge(base64string){
-    axios.post('http://20.40.147.52:3000/agegender',{base64string})
+    axios.post('http://52.237.9.215:8000/agegender',{base64string})
       .then(response =>{
         if(response.data==="Face Not Detected"){
           this.setState({
@@ -172,7 +171,7 @@ class Dashboard extends Component {
 
 
   updateEmotion(base64string){
-    axios.post('http://20.40.147.52:3000/emotions',{base64string})
+    axios.post('http://52.237.9.215:8000/emotions',{base64string})
       .then(response =>{
         if(response.data==="Face Not Detected"){
           this.setState({
@@ -189,7 +188,7 @@ class Dashboard extends Component {
   }
 
   updateBeard(base64string){
-    axios.post('http://20.40.147.52:3000/beard',{base64string})
+    axios.post('http://52.237.9.215:8000/beard',{base64string})
       .then(response =>{
         if(response.data==="Face Not Detected" || response.data.beard==="Not Detected"){
           this.setState({
