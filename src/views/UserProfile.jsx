@@ -90,7 +90,6 @@ class UserProfile extends Component {
     axios.get('http://192.168.0.41:8080/getGender')
       .then(response =>{
         console.log(response.data[0].Male.nrOfMales)
-       
       })
     }
 
@@ -105,7 +104,7 @@ class UserProfile extends Component {
 
  
   updateAge = ()=>{
-    axios.get('http://40.89.164.225:8080/getAge')
+    axios.get('https://api.taleas.co/getAge')
     .then(response =>{
       let data = {
         labels: [],
@@ -166,7 +165,7 @@ class UserProfile extends Component {
   }
 
   updateEmotion = ()=>{
-    axios.get('http://40.89.164.225:8080/getEmotion')
+    axios.get('https://api.taleas.co/getEmotion')
     .then(response =>{
       let data = {
         labels: [],
@@ -194,7 +193,7 @@ class UserProfile extends Component {
   }
 
   updateBeard = ()=>{
-    axios.get('http://40.89.164.225:8080/getBeard')
+    axios.get('https://api.taleas.co/getBeard')
     .then(response =>{
       let data = {
         labels: [],
@@ -212,7 +211,7 @@ class UserProfile extends Component {
   }
 
   updateGender = ()=>{
-    axios.get('http://40.89.164.225:8080/getGender')
+    axios.get('https://api.taleas.co/getGender')
     .then(response =>{
       let data = {
         labels: [],

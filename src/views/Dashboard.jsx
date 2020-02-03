@@ -110,7 +110,7 @@ class Dashboard extends Component {
   }
 /*http://23.96.37.119:8080/getAllPersons */
   intervalTestAPI() {
-    axios.get('http://52.237.9.215:8000/test')
+    axios.get('https://taleas.co/test')
       .then(response =>{
         if(this.state.serverStatus==="OFF"){
           this.succesActions()
@@ -150,9 +150,9 @@ class Dashboard extends Component {
   }
 
   updateGenderAge(base64string){
-    axios.post('http://52.237.9.215:8000/agegender',{base64string})
+    axios.post('https://taleas.co/agegender',{base64string})
       .then(response =>{
-        if(response.data==="Face Not Detected"){
+        if(response.data==="No Face Detected"){
           this.setState({
             genderStr: "-",
             ageStr: "-"
@@ -171,9 +171,9 @@ class Dashboard extends Component {
 
 
   updateEmotion(base64string){
-    axios.post('http://52.237.9.215:8000/emotions',{base64string})
+    axios.post('https://taleas.co/emotions',{base64string})
       .then(response =>{
-        if(response.data==="Face Not Detected"){
+        if(response.data==="Face not found !!!"){
           this.setState({
             emotionStr: "-"
           })
@@ -188,11 +188,11 @@ class Dashboard extends Component {
   }
 
   updateBeard(base64string){
-    axios.post('http://52.237.9.215:8000/beard',{base64string})
+    axios.post('https://taleas.co/beard',{base64string})
       .then(response =>{
-        if(response.data==="Face Not Detected" || response.data.beard==="Not Detected"){
+        if(response.data==="No Face Detected"){
           this.setState({
-            beardStr: "-"
+            beardStr: "Not Detected"
           })
         }
         else{
